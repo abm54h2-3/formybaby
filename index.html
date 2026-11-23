@@ -50,8 +50,6 @@ body::after {
     pointer-events: none;
 }
 
-/* FLOWER */
-
 #flower-background {
     position: fixed;
     inset: 0;
@@ -77,8 +75,6 @@ body::after {
     text-shadow: 0 0 12px rgba(242,138,203,0.3);
 }
 
-/* HEART */
-
 #heart-container {
     position: fixed;
     right: -2vw;
@@ -95,8 +91,6 @@ body::after {
     height: 100%;
     display: block;
 }
-
-/* TIMER */
 
 .wrapper {
     position: relative;
@@ -218,8 +212,6 @@ body::after {
     opacity: 0.92;
 }
 
-/* SMALLER SCREENS */
-
 @media(max-width: 900px) {
     #heart-container {
         width: 35vw;
@@ -272,17 +264,14 @@ body::after {
 
 <body>
 
-<!-- FLOWER -->
 <div id="flower-background">
     <pre id="flower"></pre>
 </div>
 
-<!-- HEART -->
 <div id="heart-container">
     <canvas id="love-heart"></canvas>
 </div>
 
-<!-- TIMER -->
 <div class="wrapper">
 
     <div class="title">
@@ -340,7 +329,6 @@ body::after {
 
 <script>
 
-/* TIMER */
 
 const startDate = new Date("2025-07-17T00:00:00");
 
@@ -365,9 +353,6 @@ function updateTimer() {
 
 updateTimer();
 setInterval(updateTimer, 1000);
-
-
-/* FLOWER ANIMATION */
 
 const lines = [
     "                                          ....",
@@ -433,8 +418,6 @@ async function animateFlower() {
 
 animateFlower();
 
-
-/* MULTILINGUAL HEART ANIMATION */
 
 const canvas = document.getElementById("love-heart");
 const ctx = canvas.getContext("2d");
