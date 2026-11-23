@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mina and Ash</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+    filter: blur(70px);
+    pointer-events: none;
+}
+
+/* FLOWER */
+
+#flower-background {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 3vw;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.23;
+    transition: opacity 1s ease;
+}
+
+#flower {
+    font-family: Consolas, monospace;
+    font-size: clamp(7px, 1.1vw, 16px);
+    line-height: 1.12;
+    white-space: pre;
+    letter-spacing: 0;
+    text-align: left;
+    color: #f28acb;
+    text-shadow: 0 0 12px rgba(242,138,203,0.3);
+}
+
+/* HEART */
+
+#heart-container {
+    position: fixed;
+    right: -2vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(450px, 42vw, 700px);
+    aspect-ratio: 1;
+    z-index: 0;
+    pointer-events: none;
+}
+
+#love-heart {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* TIMER */
+
+.wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 32px;
+}
+
+.name {
+    font-family: 'Alex Brush', cursive;
+    font-size: 64px;
+    color: white;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,0.95),
+        0 0 25px rgba(255,255,255,0.25),
+        0 0 55px rgba(255,255,255,0.08);
+}
+
+.and {
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+.panel {
+    width: 260px;
+    padding: 24px 20px;
+    border-radius: 34px;
+
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 0 40px rgba(255,255,255,0.12),
+        0 0 90px rgba(255,255,255,0.10),
+        0 0 180px rgba(255,255,255,0.08),
+        inset 0 0 30px rgba(255,255,255,0.03);
+
+    position: relative;
+}
+
+.panel::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    border-radius: 50px;
+
+    background: radial-gradient(
+        circle,
+        rgba(255,255,255,0.18),
+        transparent 70%
+    );
+
+    filter: blur(45px);
+    z-index: -1;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.block:last-child {
+    margin-bottom: 0;
+}
+
+.number-box {
+    width: 160px;
+    height: 86px;
+    border-radius: 20px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(70,70,70,0.45),
+        rgba(40,40,40,0.30)
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow:
+        inset 0 1px 10px rgba(255,255,255,0.03),
+        inset 0 -2px 12px rgba(0,0,0,0.55),
+        0 0 12px rgba(255,255,255,0.03);
+}
+
+.number {
+    color: white;
+    font-family: Consolas, monospace;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.15);
+}
+
+.label {
+    margin-top: 12px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.92;
+}
+
+/* SMALLER SCREENS */
+
+@media(max-width: 900px) {
+    #heart-container {
+        width: 35vw;
+        right: -2vw;
+    }
+
+    #flower {
+        font-size: 9px;
+    }
+}
+
+@media(max-width: 600px) {
+    .name {
+        font-size: 46px;
+    }
+
+    .and {
+        font-size: 22px;
+    }
+
+    .title {
+        gap: 12px;
+    }
+
+    .panel {
+        transform: scale(0.92);
+    }
+
+    #flower-background {
+        justify-content: center;
+        padding-left: 0;
+        transform: translateX(-25%);
+    }
+
+    #flower {
+        font-size: 5px;
+    }
+
+    #heart-container {
+        width: 65vw;
+        right: 50%;
+        top: auto;
+        bottom: -5%;
+        transform: translateX(50%);
+        opacity: 0.35;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FLOWER -->
+<div id="flower-background">
+    <pre id="flower"></pre>
+</div>
+
+<!-- HEART -->
+<div id="heart-container">
+    <canvas id="love-heart"></canvas>
+</div>
+
+<!-- TIMER -->
+<div class="wrapper">
+
+    <div class="title">
+        <div class="name">Mina</div>
+        <div class="and">and</div>
+        <div class="name">Ash</div>
+    </div>
+
+    <div class="panel">
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="months">0</div>
+            </div>
+            <div class="label">Months</div>
+        </div>
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="weeks">0</div>
+            </div>
+            <div class="label">Weeks</div>
+        </div>
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="days">0</div>
+            </div>
+            <div class="label">Days</div>
+        </div>
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="hours">0</div>
+            </div>
+            <div class="label">Hours</div>
+        </div>
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="minutes">0</div>
+            </div>
+            <div class="label">Minutes</div>
+        </div>
+
+        <div class="block">
+            <div class="number-box">
+                <div class="number" id="seconds">0</div>
+            </div>
+            <div class="label">Seconds</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+/* TIMER */
+
+const startDate = new Date("2025-07-17T00:00:00");
+
+function updateTimer() {
+    const now = new Date();
+    const diff = now - startDate;
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalDays = Math.floor(totalHours / 24);
+    const totalWeeks = Math.floor(totalDays / 7);
+    const totalMonths = Math.floor(totalDays / 30.44);
+
+    document.getElementById("months").innerText = totalMonths;
+    document.getElementById("weeks").innerText = totalWeeks;
+    document.getElementById("days").innerText = totalDays;
+    document.getElementById("hours").innerText = totalHours;
+    document.getElementById("minutes").innerText = totalMinutes;
+    document.getElementById("seconds").innerText = totalSeconds;
+}
+
+updateTimer();
+setInterval(updateTimer, 1000);
+
+
+/* FLOWER ANIMATION */
+
+const lines = [
+    "                                          ....",
+    "                                       ,;;'''';;,                    ,;;;;,",
+    "                             ,        ;;'      `;;,               .,;;;'   ;",
+    "                          ,;;;       ;;          `;;,';;;,.     ,%;;'     '",
+    "                        ,;;,;;       ;;         ,;`;;;, `;::.  %%;'",
+    "                       ;;;,;;;       `'       ,;;; ;;,;;, `::,%%;'",
+    "                       ;;;,;;;,          .,%%%%%'% ;;;;,;;   %;;;",
+    "             ,%,.      `;;;,;;;,    .,%%%%%%%%%'%; ;;;;;,;;  %;;;",
+    "            ;,`%%%%%%%%%%`;;,;;'%%%%%%%%%%%%%'%%'  `;;;;;,;, %;;;",
+    "            ;;;,`%%%%%%%%%%%,; ..`%%%%%%%%;'%%%'    `;;;;,;; %%;;",
+    "             `;;;;;,`%%%%%,;;/, .. `\"\"\"'',%%%%%      `;;;;;; %%;;,",
+    "                `;;;;;;;,;;/////,.    ,;%%%%%%%        `;;;;,`%%;;",
+    "                       ;;;/%%%%,%///;;;';%%%%%%,          `;;;%%;;,",
+    "                      ;;;/%%%,%%%%%/;;;';;'%%%%%,             `%%;;",
+    "                     .;;/%%,%%%%%//;;'  ;;;'%%%%%,             %%;;,",
+    "                     ;;//%,%%%%//;;;'   `;;;;'%%%%             `%;;;",
+    "                     ;;//%,%//;;;;'      `;;;;'%%%              %;;;,",
+    "                     `;;//,/;;;'          `;;;'%%'              `%;;;",
+    "                       `;;;;'               `;'%'                `;;;;",
+    "                                              '      .,,,.        `;;;;",
+    "                                                  ,;;;;;;;;;;,     `;;;;",
+    "                                                 ;;;'    ;;;,;;,    `;;;;",
+    "                                                 ;;;      ;;;;,;;.   `;;;;",
+    "                                                  `;;      ;;;;;,;;   ;;;;",
+    "                                                    `'      `;;;;,;;  ;;;;",
+    "                                                               `;;,;, ;;;;",
+    "                                                                  ;;, ;;;;",
+    "      from your love                                                ';;;;;",
+    "           hehe                                                      ;;;;;",
+    "                                                                    .;;;;'",
+    "                                                                   .;;;;'",
+    "                                                                  ;;;;;'",
+    "                                                                 ,;;;;'"
+];
+
+const flower = document.getElementById("flower");
+const flowerBackground = document.getElementById("flower-background");
+
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function animateFlower() {
+    while (true) {
+        flower.replaceChildren();
+        flowerBackground.style.opacity = "0.23";
+
+        for (const line of lines) {
+            flower.appendChild(document.createTextNode(line));
+            flower.appendChild(document.createTextNode("\n"));
+            await wait(80);
+        }
+
+        await wait(2000);
+
+        flowerBackground.style.opacity = "0";
+
+        await wait(1000);
+    }
+}
+
+animateFlower();
+
+
+/* MULTILINGUAL HEART ANIMATION */
+
+const canvas = document.getElementById("love-heart");
+const ctx = canvas.getContext("2d");
+
+const WIDTH = 800;
+const HEIGHT = 800;
+
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+
+const SC = 19;
+const OY = 20;
+const DURATION = 10000;
+const ANIM = 672;
+const LIFT = 34;
+const GAP = 7;
+const SIZES = [9, 10, 11, 12];
+const FONT = "Arial";
+
+const PHRASES = [
+    "I love you", "Të dua", "Seni seviyorum", "Te amo",
+    "Je t'aime", "Ich liebe dich", "Ti amo", "Eu te amo",
+    "Я тебя люблю", "사랑해", "愛してる", "我爱你",
+    "मैं तुमसे प्यार करता हूँ", "Σ' αγαπώ",
+    "Ik hou van jou", "Jag älskar dig", "Kocham cię",
+    "ฉันรักเธอ", "Anh yêu em", "Aku cinta kamu",
+    "Я тебе кохаю"
+];
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function clamp(v) {
+    return Math.max(0, Math.min(1, v));
+}
+
+function mix(a, b, k) {
+    return a.map((v, i) => v + (b[i] - v) * k);
+}
+
+function dim(c, k) {
+    return c.map(v => v * k);
+}
+
+function hex(c) {
+    return "#" + c.map(v =>
+        Math.round(clamp(v) * 255).toString(16).padStart(2, "0")
+    ).join("");
+}
+
+function heart(a) {
+    const x = 16 * Math.pow(Math.sin(a), 3);
+
+    const y =
+        13 * Math.cos(a)
+        - 5 * Math.cos(2 * a)
+        - 2 * Math.cos(3 * a)
+        - Math.cos(4 * a);
+
+    return [x * SC, y * SC + OY];
+}
+
+const POLY = Array.from({ length: 720 }, (_, i) =>
+    heart(2 * Math.PI * i / 720)
+);
+
+const EDGES = POLY.map((p, i) => [
+    p,
+    POLY[(i + 1) % POLY.length]
+]);
+
+const YMAX = Math.max(...POLY.map(p => p[1]));
+const YMIN = Math.min(...POLY.map(p => p[1]));
+const CY = (YMAX + YMIN) / 2;
+
+function spans(y) {
+    const xs = [];
+
+    for (const [[x1, y1], [x2, y2]] of EDGES) {
+        if ((y1 <= y && y < y2) || (y2 <= y && y < y1)) {
+            xs.push(x1 + (y - y1) * (x2 - x1) / (y2 - y1));
+        }
+    }
+
+    xs.sort((a, b) => a - b);
+
+    const result = [];
+
+    for (let i = 0; i < xs.length; i += 2) {
+        if (xs[i + 1] !== undefined) {
+            result.push([xs[i], xs[i + 1]]);
+        }
+    }
+
+    return result;
+}
+
+function intersect(A, B) {
+    const out = [];
+
+    for (const a of A) {
+        for (const b of B) {
+            const lo = Math.max(a[0], b[0]);
+            const hi = Math.min(a[1], b[1]);
+
+            if (hi - lo > 14) {
+                out.push([lo, hi]);
+            }
+        }
+    }
+
+    return out;
+}
+
+function mathDist(x, y) {
+    return Math.hypot(
+        x / (16 * SC),
+        (y - CY) / (14.5 * SC)
+    );
+}
+
+function buildHeart() {
+    const placed = [];
+    const rowHeight = 22;
+    const half = rowHeight / 2;
+
+    let phraseOrder = [...PHRASES];
+    let phraseIndex = 0;
+
+    function nextPhrase() {
+        if (phraseIndex >= phraseOrder.length) {
+            phraseOrder = [...PHRASES];
+
+            for (let i = phraseOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [phraseOrder[i], phraseOrder[j]] =
+                    [phraseOrder[j], phraseOrder[i]];
+            }
+
+            phraseIndex = 0;
+        }
+
+        return phraseOrder[phraseIndex++];
+    }
+
+    let y = YMAX - half;
+
+    while (y > YMIN + half) {
+        const row = intersect(
+            spans(y + half),
+            spans(y - half)
+        );
+
+        for (const [left, right] of row) {
+            const lo = left + 4;
+            const hi = right - 4;
+
+            let cur = lo + random(0, 8);
+            const line = [];
+
+            while (true) {
+                let fit = null;
+
+                for (let attempt = 0; attempt < 10; attempt++) {
+                    const text = nextPhrase();
+                    const size = SIZES[
+                        Math.floor(random(0, SIZES.length))
+                    ];
+
+                    ctx.font = `bold ${size}px ${FONT}`;
+                    const width = ctx.measureText(text).width;
+
+                    if (cur + width <= hi) {
+                        fit = { text, size, width };
+                        break;
+                    }
+                }
+
+                if (!fit) break;
+
+                line.push({
+                    x: cur + fit.width / 2,
+                    ...fit
+                });
+
+                cur += fit.width + GAP;
+            }
+
+            if (!line.length) continue;
+
+            if (line.length > 1) {
+                const remaining =
+                    hi - (line[line.length - 1].x +
+                    line[line.length - 1].width / 2);
+
+                line.forEach((item, i) => {
+                    item.x += remaining * i / (line.length - 1);
+                });
+            } else {
+                line[0].x = (lo + hi) / 2;
+            }
+
+            line.forEach((item, i) => {
+                const edge = i === 0 || i === line.length - 1;
+
+                let color = mix(
+                    [0.58, 0, 0.09],
+                    [0.90, 0.05, 0.14],
+                    0.25 + 0.75 * Math.min(1, mathDist(item.x, y))
+                );
+
+                color = mix(
+                    color,
+                    [0.98, 0.10, 0.16],
+                    random(0, 0.35) + (edge ? 0.3 : 0)
+                );
+
+                placed.push({
+                    x: item.x,
+                    y,
+                    text: item.text,
+                    size: item.size,
+                    color,
+                    edge,
+                    dx: random(-10, 10),
+                    flashUntil: 0
+                });
+            });
+        }
+
+        y -= rowHeight;
+    }
+
+    const outer = placed.filter(p => p.edge);
+    const inner = placed.filter(p => !p.edge);
+
+    outer.sort((a, b) =>
+        Math.atan2(a.x, a.y - CY) -
+        Math.atan2(b.x, b.y - CY)
+    );
+
+    inner.sort((a, b) =>
+        -mathDist(a.x, a.y) + mathDist(b.x, b.y)
+    );
+
+    return [...outer, ...inner];
+}
+
+const items = buildHeart();
+
+const BGC = [6 / 255, 2 / 255, 8 / 255];
+const FLASH = [1, 0.78, 0.78];
+
+const startTime = performance.now();
+
+let nextShimmer = DURATION + ANIM;
+let finished = false;
+
+function drawItem(item, elapsed, index, now) {
+    const spawnTime = index * DURATION / items.length;
+
+    if (elapsed < spawnTime) return;
+
+    const u = clamp((elapsed - spawnTime) / ANIM);
+    const ease = 1 - Math.pow(1 - u, 3);
+
+    const x = WIDTH / 2 + item.x;
+    const y = HEIGHT / 2 - item.y;
+
+    const hover = (1 - ease) * LIFT;
+    const px = x + item.dx * (1 - ease);
+    const py = y - hover;
+
+    const c = item.color;
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    /* Shadow */
+    ctx.font = `bold ${item.size}px ${FONT}`;
+    ctx.fillStyle = hex(mix(BGC, dim(c, 0.30), ease));
+    ctx.fillText(item.text, px + 2, py + 3);
+
+    /* Halo */
+    ctx.font = `bold ${item.size + 1}px ${FONT}`;
+    ctx.fillStyle = hex(mix(BGC, dim(c, 0.20), ease * ease));
+    ctx.fillText(item.text, px, py);
+
+    /* Main text */
+    ctx.font = `bold ${item.size}px ${FONT}`;
+
+    let color = mix(BGC, c, Math.pow(ease, 1.5));
+
+    if (item.flashUntil > now) {
+        color = mix(color, FLASH, 0.6);
+    }
+
+    ctx.fillStyle = hex(color);
+    ctx.fillText(item.text, px, py);
+}
+
+function animateHeart() {
+    const now = performance.now();
+    const elapsed = now - startTime;
+
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    items.forEach((item, index) => {
+        drawItem(item, elapsed, index, now);
+    });
+
+    if (elapsed >= DURATION + ANIM) {
+        finished = true;
+    }
+
+    if (finished && now >= nextShimmer) {
+        const item = items[Math.floor(Math.random() * items.length)];
+
+        item.flashUntil = now + 260;
+        nextShimmer = now + 140;
+    }
+
+    requestAnimationFrame(animateHeart);
+}
+
+animateHeart();
+
+</script>
+
+</body>
+</html>
